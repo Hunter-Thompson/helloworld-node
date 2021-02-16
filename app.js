@@ -1,14 +1,19 @@
-const http = require('http');
+"use strict"
 
-const hostname = '0.0.0.0';
-const port = 3000;
+const redis = require('redis');
+const express = require('express')
+let app = express();
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
+let redisClient = redis.createClient({host: process.env.REDIS_URI});
+
+app.get("/incr", (req, res) => {
+  redisClient.incr("counter", (err, val) => {
+    res.status(200).send({"count": val});
+  });
+  
 });
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+app.listen(3000, () =>
+{
+  console.log("Listening");
 });
