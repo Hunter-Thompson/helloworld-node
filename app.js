@@ -6,7 +6,7 @@ let app = express();
 
 let redisClient = redis.createClient({host: process.env.REDIS_URI});
 
-app.get("/incr", (req, res) => {
+app.get("/in", (req, res) => {
   redisClient.incr("counter", (err, val) => {
     res.status(200).send({"count": val});
   });
